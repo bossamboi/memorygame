@@ -16,9 +16,18 @@ const COLORS = [
   "purple",
 ];
 
-const colors = shuffle(COLORS);
+const button = document.querySelector("button");
+const gameBoard = document.getElementById("game");
+button.addEventListener("click", startGame);
 
-createCards(colors);
+function startGame() {
+  button.innerText = "New Game";
+  while (gameBoard.firstChild) {
+    gameBoard.removeChild(gameBoard.firstChild);
+  }
+  const colors = shuffle(COLORS);
+  createCards(colors);
+}
 
 /** Shuffle array items in-place and return shuffled array. */
 
