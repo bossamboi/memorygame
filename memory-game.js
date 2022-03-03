@@ -52,6 +52,7 @@ function createCards(colors) {
     // missing code here ...
     let card = document.createElement("div");
     card.setAttribute("class", color);
+    card.setAttribute("data-status", "unflipped");
     card.addEventListener("click", handleCardClick);
     gameBoard.append(card);
   }
@@ -68,7 +69,7 @@ function createCards(colors) {
 function flipCard(card) {
   // ... you need to write this ...
   card.style.backgroundColor = `${card.getAttribute("class")}`;
-  card.classList.add("flipped");
+  card.setAttribute("data-status", "guess");
   card.removeEventListener("click", handleCardClick);
 
   // console.log(card.style.backgroundColor);
@@ -79,7 +80,7 @@ function flipCard(card) {
 function unFlipCard(card) {
   // ... you need to write this ...
   card.style.backgroundColor = "";
-  card.classList.remove("flipped");
+  card.setAttribute("data-status", "unflipped");
   card.addEventListener("click", handleCardClick);
 }
 
@@ -100,19 +101,39 @@ function handleCardClick(evt) {
   // if its the first card...do nothing
   // if its the second card... compare second flip to first flip
   if (numberFlipped === 2) {
-    let flippedCards = document.querySelectorAll(".flipped");
-    if (flippedCards[0].style.backgroundColor !== flippedCards[1].style.backgroundColor) {
-      for (let flippedCard of flippedCards) {
-        setTimeout(unFlipCard, 1000, flippedCard);
-      }
-    } else {
-      for (let flippedCard of flippedCards) {
-        flippedCard.classList.remove("flipped");
-      }
+    let unflippedCards = document.querySelectorAll(`[data-status*="unflipped"]`);
+    console.log(unflippedCards);
+    let guessCards = document.querySelectorAll(`[data-status*="guess"]`);
+
+    for (let unflippedCard of unflippedCards) {
+      unflippedCard.removeEventListener("click", handleCardClick);
     }
 
+    if (guessCards[0].style.backgroundColor !== guessCards[1].style.backgroundColor) {
+      for (let guessCard of guessCards) {
+        setTimeout(unFlipCard, FOUND_MATCH_WAIT_MSECS, guessCard);
+        setTimeout(reactivateClick, FOUND_MATCH_WAIT_MSECS);
+      }
+    } else {
+      for (let guessCard of guessCards) {
+        guessCard.setAttribute("data-status", "flipped");
+        reactivateClick();
+      }
+    }
     numberFlipped = 0;
+
+    function reactivateClick() {
+      for (let unflippedCard of unflippedCards) {
+        unflippedCard.addEventListener("click", handleCardClick);
+      }
+    }
   }
+
+  // while (numberFlipped === 2) {
+  //   for (let unflippedCard of unflippedCards) {
+  //     unflippedCard.removeEventListener("click", handleCardClick);
+  //   }
+  // }
 
   // if first card class or color is same as second. keep cards face up and make them unclickable
   // if not equal unflip cards.
