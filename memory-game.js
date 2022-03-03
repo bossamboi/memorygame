@@ -4,14 +4,21 @@
 
 const FOUND_MATCH_WAIT_MSECS = 1000;
 const COLORS = [
-  "red", "blue", "green", "orange", "purple",
-  "red", "blue", "green", "orange", "purple",
+  "red",
+  "blue",
+  "green",
+  "orange",
+  "purple",
+  "red",
+  "blue",
+  "green",
+  "orange",
+  "purple",
 ];
 
 const colors = shuffle(COLORS);
 
 createCards(colors);
-
 
 /** Shuffle array items in-place and return shuffled array. */
 
@@ -43,23 +50,52 @@ function createCards(colors) {
 
   for (let color of colors) {
     // missing code here ...
+    let card = document.createElement("div");
+    card.setAttribute("class", color);
+    gameBoard.append(card);
   }
+
+  gameBoard.addEventListener("click", function (e) {
+    if (COLORS.indexOf(e.target.getAttribute("class")) >= 0) {
+      handleCardClick(e);
+    }
+  });
 }
 
 /** Flip a card face-up. */
 
 function flipCard(card) {
   // ... you need to write this ...
+  card.style.backgroundColor = `${card.getAttribute("class")}`;
+  // console.log(card.style.backgroundColor);
 }
 
 /** Flip a card face-down. */
 
 function unFlipCard(card) {
   // ... you need to write this ...
+  card.style.backgroundColor = "";
 }
 
 /** Handle clicking on a card: this could be first-card or second-card. */
 
+let numberFlipped = 0;
+
 function handleCardClick(evt) {
   // ... you need to write this ...
+  // console.log(evt.target);
+  let card = evt.target;
+  // flip card and reveal color underneath to match div class
+  flipCard(card);
+  numberFlipped++;
+  console.log(numberFlipped);
+  if (numberFlipped === 2) {
+    setTimeout(unFlipCard, 1000, card);
+    numberFlipped = 0;
+  }
+
+  // if its the first card...do nothing
+  // if its the second card... compare second flip to first flip
+  // if first card class or color is same as second. keep cards face up and make them unclickable
+  // if not equal unflip cards.
 }
