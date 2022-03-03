@@ -18,7 +18,9 @@ const COLORS = [
 
 const button = document.querySelector("button");
 const gameBoard = document.getElementById("game");
+const score = document.getElementById("guesses");
 button.addEventListener("click", startGame);
+let guesses;
 
 function startGame() {
   button.innerText = "New Game";
@@ -27,6 +29,8 @@ function startGame() {
   }
   const colors = shuffle(COLORS);
   createCards(colors);
+  guesses = 0;
+  score.innerText = guesses;
 }
 
 /** Shuffle array items in-place and return shuffled array. */
@@ -55,7 +59,7 @@ function shuffle(items) {
  */
 
 function createCards(colors) {
-  const gameBoard = document.getElementById("game");
+  // const gameBoard = document.getElementById("game");
 
   for (let color of colors) {
     // missing code here ...
@@ -100,6 +104,8 @@ let numberFlipped = 0;
 function handleCardClick(evt) {
   // ... you need to write this ...
   // console.log(evt.target);
+  guesses++;
+  score.innerText = guesses;
   let card = evt.target;
   // flip card and reveal color underneath to match div class
   flipCard(card);
@@ -111,7 +117,6 @@ function handleCardClick(evt) {
   // if its the second card... compare second flip to first flip
   if (numberFlipped === 2) {
     let unflippedCards = document.querySelectorAll(`[data-status*="unflipped"]`);
-    console.log(unflippedCards);
     let guessCards = document.querySelectorAll(`[data-status*="guess"]`);
 
     for (let unflippedCard of unflippedCards) {
