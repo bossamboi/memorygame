@@ -52,14 +52,15 @@ function createCards(colors) {
     // missing code here ...
     let card = document.createElement("div");
     card.setAttribute("class", color);
+    card.addEventListener("click", handleCardClick);
     gameBoard.append(card);
   }
 
-  gameBoard.addEventListener("click", function (e) {
-    if (COLORS.indexOf(e.target.getAttribute("class")) >= 0) {
-      handleCardClick(e);
-    }
-  });
+  // gameBoard.addEventListener("click", function (e) {
+  //   if (COLORS.indexOf(e.target.getAttribute("class")) >= 0) {
+  //     handleCardClick(e);
+  //   }
+  // });
 }
 
 /** Flip a card face-up. */
@@ -67,6 +68,9 @@ function createCards(colors) {
 function flipCard(card) {
   // ... you need to write this ...
   card.style.backgroundColor = `${card.getAttribute("class")}`;
+  card.classList.add("flipped");
+  card.removeEventListener("click", handleCardClick);
+
   // console.log(card.style.backgroundColor);
 }
 
@@ -75,6 +79,8 @@ function flipCard(card) {
 function unFlipCard(card) {
   // ... you need to write this ...
   card.style.backgroundColor = "";
+  card.classList.remove("flipped");
+  card.addEventListener("click", handleCardClick);
 }
 
 /** Handle clicking on a card: this could be first-card or second-card. */
@@ -87,15 +93,27 @@ function handleCardClick(evt) {
   let card = evt.target;
   // flip card and reveal color underneath to match div class
   flipCard(card);
+
   numberFlipped++;
   console.log(numberFlipped);
-  if (numberFlipped === 2) {
-    setTimeout(unFlipCard, 1000, card);
-    numberFlipped = 0;
-  }
 
   // if its the first card...do nothing
   // if its the second card... compare second flip to first flip
+  if (numberFlipped === 2) {
+    let flippedCards = document.querySelectorAll(".flipped");
+    if (flippedCards[0].style.backgroundColor !== flippedCards[1].style.backgroundColor) {
+      for (let flippedCard of flippedCards) {
+        setTimeout(unFlipCard, 1000, flippedCard);
+      }
+    } else {
+      for (let flippedCard of flippedCards) {
+        flippedCard.classList.remove("flipped");
+      }
+    }
+
+    numberFlipped = 0;
+  }
+
   // if first card class or color is same as second. keep cards face up and make them unclickable
   // if not equal unflip cards.
 }
