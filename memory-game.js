@@ -2,7 +2,7 @@
 
 /** Memory game: find matching pairs of cards and flip both of them. */
 
-const FOUND_MATCH_WAIT_MSECS = 1000;
+const FOUND_MATCH_WAIT_MSECS = 800;
 const COLORS = [
   "red",
   "blue",
@@ -15,6 +15,32 @@ const COLORS = [
   "orange",
   "purple",
 ];
+
+/**
+ * nate
+ * cassie
+ * rue
+ * jules
+ * maddy
+ * --^ beginner (10 cards)
+ * kat
+ * fez
+ * ashtray
+ * suze (cassie mom)
+ * lexi (cassie sister)
+ * gia (rue sister)
+ * dom fike
+ * --^ amateur (24 cards)
+ * cal
+ * ethan
+ * faye
+ * leslie bennet (rue's mom)
+ * custer (ashtray's killer)
+ * mouse
+ * ali (rue's sponsor)
+ * chris mckay
+ * --^ expert (40 cards)
+ */
 
 const button = document.querySelector("button");
 const gameBoard = document.getElementById("game");
