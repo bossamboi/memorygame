@@ -19,8 +19,17 @@ const COLORS = [
 const button = document.querySelector("button");
 const gameBoard = document.getElementById("game");
 const score = document.getElementById("guesses");
+const best = document.getElementById("lowest");
 button.addEventListener("click", startGame);
+
 let guesses;
+let currentScore;
+
+if (localStorage.lowestScore === undefined) {
+  localStorage.setItem("lowestScore", "");
+} else {
+  best.innerText = localStorage.lowestScore;
+}
 
 function startGame() {
   button.innerText = "New Game";
@@ -143,6 +152,11 @@ function handleCardClick(evt) {
     }
   }
 
+  let unflippedCards = document.querySelectorAll(`[data-status*="unflipped"]`);
+  if (unflippedCards.length === 0) {
+    updateLowestScore();
+  }
+
   // while (numberFlipped === 2) {
   //   for (let unflippedCard of unflippedCards) {
   //     unflippedCard.removeEventListener("click", handleCardClick);
@@ -151,4 +165,14 @@ function handleCardClick(evt) {
 
   // if first card class or color is same as second. keep cards face up and make them unclickable
   // if not equal unflip cards.
+}
+
+function updateLowestScore() {
+  if (localStorage.lowestScore === "") {
+    localStorage.lowestScore = guesses;
+    best.innerText = guesses;
+  } else if (guesses < parseInt(localStorage.lowestScore)) {
+    localStorage.lowestScore = guesses;
+    best.innerText = guesses;
+  }
 }
